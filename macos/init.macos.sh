@@ -24,6 +24,7 @@ xcode-select --install || softwareupdate --install -a
 ############################
 # Install Packages by brew #
 ############################
+# ALL_PROXY=socks5://127.0.0.1:7891
 brew install \
     git-flow \
     readline \
@@ -65,6 +66,15 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 EOF
 
 
+##################
+# Install iTerm2 #
+##################
+wget -c -P /tmp/ https://iterm2.com/downloads/stable/iTerm2-3_3_11.zip
+unzip -d /tmp/ /tmp/iTerm2-3_3_11.zip
+open /tmp/
+echo -e "\n\tPlease move \"iTerm\" to \"Applications\"\n"
+
+
 ##########################
 # Install Docker-Desktop #
 ##########################
@@ -82,7 +92,7 @@ which docker && { \
 #   @TODO: configs
 wget -c -O /tmp/SublimeTextBuild.dmg https://download.sublimetext.com/Sublime%20Text%20Build%203211.dmg
 open /tmp/SublimeTextBuild.dmg
-grep subl ~/.profile || echo 'alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"' >> ~/.profile
+grep subl ~/.bash_profile || echo 'alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"' >> ~/.bash_profile
 # Install Plugins
 #   JSON
 #   Emmet
@@ -184,6 +194,31 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 #   https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html
 #   https://maven.apache.org/install.html
 #   @TODO:
+
+#################
+# Install TODO  #
+#################
+cat > ~/to-be-install.md <<EOT
+# To Be Insltalled
+* Goolge
+    Chrome
+    Chrome Canary
+* Firefox
+* Slack
+* Zoom
+* Mweb
+* Youdao Dict
+* CheatSheet
+* Enpass
+* Lastpass
+* Easyfind
+* VLC
+* OBS
+* PyCharm
+* Evernote
+* ClashX
+* Tunnelblick
+EOT
 
 
 ###########

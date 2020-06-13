@@ -8,6 +8,48 @@
 #
 
 
+#####################
+# Configure for ssh #
+#####################
+mkdir -pv    /tmp/hosts
+mkdir -pv    ~/.ssh/conf.d
+touch        ~/.ssh/config
+touch        ~/.ssh/{deveplopment,staging,productoin,me}.pem
+chmod -R 700 ~/.ssh
+chmod -R 700 ~/.ssh/conf.d
+find         ~/.ssh/ -type f -exec chmod 600 {} \;
+cat > ~/.ssh/config <<EOT
+Host *
+$([[ $(uname) == "Darwin" ]]&&echo "    UseKeychain yes")
+    AddKeysToAgent yes
+    Compression yes
+    PubkeyAuthentication yes
+
+    ControlMaster auto
+    ControlPersist yes
+    ControlPath /tmp/hosts/%r@%h-%p
+
+    SendEnv LANG LC_ALL=en.US.UTF-8
+    GSSAPIAuthentication no
+    StrictHostKeyChecking no
+    ServerAliveInterval 60
+    ServerAliveCountMax 360
+    TCPKeepAlive yes
+
+Include ~/.ssh/conf.d/development
+Include ~/.ssh/conf.d/testing
+Include ~/.ssh/conf.d/staging
+Include ~/.ssh/conf.d/production
+Include ~/.ssh/conf.d/default
+EOT
+cat > ~/.ssh/conf.d/default <<EOT
+Host *
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+EOT
+
+
+
 ###############################
 # Install git-flow-completion #
 ###############################
@@ -37,6 +79,9 @@ wget -c -P /tmp/ https://repo.continuum.io/miniconda/${CONDA_SCRIPT//Darwin/MacO
 ~/miniconda3/bin/conda config --set auto_activate_base false
 ~/miniconda3/bin/conda create -n python3 python=3.7 <<<y
 ~/miniconda3/bin/conda info -e 
+~/miniconda3/bin/pip install \
+    thefuck \
+    ipython
 
 
 ############

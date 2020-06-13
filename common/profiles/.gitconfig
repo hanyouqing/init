@@ -1,0 +1,24 @@
+[alias]
+    co = checkout
+    ci = commit
+    br = branch
+    st = status
+    pu = push
+    pl = pull
+    bl = blame
+    di = diff
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    sbi = submodule init
+    sbu = submodule update
+    sbp = submodule foreach git pull
+    sbc = submodule foreach git co master
+
+[user]
+    name = Youqing Han
+    email = ihanyouqing@gmail.com
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
