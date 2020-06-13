@@ -83,11 +83,14 @@ echo -e "\n\tPlease move \"iTerm\" to \"Applications\"\n"
 ##########################
 #   https://hub.docker.com/editions/community/docker-ce-desktop-mac/
 #   https://docs.docker.com/
+#   https://docs.docker.com/compose/completion/
+#   https://docs.docker.com/engine/reference/commandline/app_completion/
 which docker || { \
     wget -c -P /tmp/ https://download.docker.com/mac/stable/Docker.dmg; \
     open /tmp/Docker.dmg; \
     cd /usr/local/etc/bash_completion.d/; \
-    curl -L -O https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose; }
+    curl -L -O https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose; \
+    curl -L -O https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker; }
 
 
 ###################
