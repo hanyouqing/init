@@ -64,6 +64,9 @@ grep '^# BASH_COMPLETION' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
 export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 EOF
+# git completion
+cd /usr/local/etc/bash_completion.d/
+curl -L -O https://raw.github.com/git/git/master/contrib/completion/git-completion.bash
 
 
 ##################
@@ -80,9 +83,11 @@ echo -e "\n\tPlease move \"iTerm\" to \"Applications\"\n"
 ##########################
 #   https://hub.docker.com/editions/community/docker-ce-desktop-mac/
 #   https://docs.docker.com/
-which docker && { \
+which docker || { \
     wget -c -P /tmp/ https://download.docker.com/mac/stable/Docker.dmg; \
-    open /tmp/Docker.dmg; }
+    open /tmp/Docker.dmg; \
+    cd /usr/local/etc/bash_completion.d/; \
+    curl -L -O https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose; }
 
 
 ###################
@@ -162,7 +167,7 @@ alias k=kubectl
 complete -F __start_kubectl k
 EOF
 kustomize install-completion <<<yes
-grep '^export KUBECONFIG' ~/.bash_profile || echo 'export KUBECONFIG="~/.kube/config$(ls -d ~/.kube/conf.d/*|sed "s#^#:#g"|tr -d "\n")"' >> ~/.bash_profile
+grep '^export KUBECONFIG' ~/.bash_profile || echo 'export KUBECONFIG="${HOME}/.kube/config$(ls -d ${HOME}/.kube/conf.d/*|sed "s#^#:#g"|tr -d "\n")"' >> ~/.bash_profile
 # Install lens
 wget -c -P /tmp/ https://github.com/lensapp/lens/releases/download/v3.4.0/Lens-3.4.0.dmg
 open /tmp/Lens-3.4.0.dmg
