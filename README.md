@@ -1,7 +1,3 @@
 # init
 
-Configure for personal setup.
-
-## 
-
-
+Configuration for initialization setup.

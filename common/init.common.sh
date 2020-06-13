@@ -49,7 +49,6 @@ Host *
 EOT
 
 
-
 ###############################
 # Install git-flow-completion #
 ###############################
@@ -67,6 +66,28 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 source ~/.${SHELL##*bin/}rc
 
 
+#####################
+# Install oh-my-zsh # 
+#####################
+#   https://ohmyz.sh/#install
+# sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+
+######################
+# Install oh-my-bash # 
+######################
+#   https://github.com/ohmybash/oh-my-bash
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
+
+############
+# SpaceVim #
+############
+# Fix CMD + C:
+#   https://github.com/SpaceVim/SpaceVim/issues/695
+curl -sLf https://spacevim.org/install.sh | bash
+
+
 #################
 # Install Conda # thefuck, ipython
 #################
@@ -82,14 +103,6 @@ wget -c -P /tmp/ https://repo.continuum.io/miniconda/${CONDA_SCRIPT//Darwin/MacO
 ~/miniconda3/bin/pip install \
     thefuck \
     ipython
-
-
-############
-# SpaceVim #
-############
-# Fix CMD + C:
-#   https://github.com/SpaceVim/SpaceVim/issues/695
-curl -sLf https://spacevim.org/install.sh | bash
 
 
 #################
@@ -111,7 +124,7 @@ mkdir -pv ~/Apps/bin
 mkdir -pv ~/github.com
 mkdir -pv ~/go/src
 ln -s ~/github.com ~/go/src/
-
+# Install maven #
 wget -c -P /tmp/ http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip
 unzip   -d ~/Apps/ /tmp/apache-maven-3.6.2-bin.zip
 ln -s      ~/Apps/apache-maven-3.6.2 ~/Apps/maven
