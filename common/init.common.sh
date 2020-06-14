@@ -85,6 +85,7 @@ source ~/.${SHELL##*bin/}rc
 ############
 # Fix CMD + C:
 #   https://github.com/SpaceVim/SpaceVim/issues/695
+#   https://github.com/yangyangwithgnu/use_vim_as_ide
 curl -sLf https://spacevim.org/install.sh | bash
 
 
