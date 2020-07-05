@@ -127,13 +127,20 @@ grep '.tfenv'  ~/.${SHELL##*bin/}rc || echo 'export PATH="$HOME/.tfenv/bin:$PATH
 ####################
 # Install Binaries #
 ####################
-#   @TODO:
-grep '^# Apps' ~/.bash_profile || echo 'PATH=$PATH:~/Apps/bin' >> ~/.bash_profile
 mkdir -pv ~/Apps/bin
+grep '^# Apps' ~/.bash_profile || cat  >> ~/.bash_profile <<EOF
+# Apps/bin $(date +%F_%T%z)
+PATH=$PATH:~/Apps/bin
+
+EOF
+
+# Golang #
 mkdir -pv ~/github.com
 mkdir -pv ~/go/src
 ln -s ~/github.com ~/go/src/
-# Install maven #
+# maven #
 wget -c -P /tmp/ http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip
 unzip   -d ~/Apps/ /tmp/apache-maven-3.6.2-bin.zip
 ln -s      ~/Apps/apache-maven-3.6.2 ~/Apps/maven
+
+#   @TODO:

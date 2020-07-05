@@ -1,10 +1,10 @@
 #!/bin/bash
 # 
-###############################################################
-#                                                             #
-#   This script is used to the initialization setup of MacOS. # 
-#                                                             #
-###############################################################
+################################################################
+#                                                              #
+#   This script is used to the initialization setup for MacOS. # 
+#                                                              #
+################################################################
 #
 
 #################
@@ -19,6 +19,13 @@ xcode-select --install || softwareupdate --install -a
 ################
 #   https://brew.sh/
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+
+
+##########
+# ClashX #
+##########
+# @TODO
 
 
 ############################
@@ -40,14 +47,17 @@ brew install \
     mtr \
     telnet
 
-###################
-# Setting library #
-###################
+
+###############
+# Set library #
+###############
+touch ~/.bash_profile
 grep '^# library' ~/.bash_profile || cat >> ~/.bash_profile <<EOL
 # library $(date +%F_%T%z)
 export LDFLAGS="-L/usr/local/opt/zlib/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include"
 export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig"
+
 EOL
 
 
@@ -57,12 +67,17 @@ EOL
 #   https://github.com/scop/bash-completion
 #   https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html
 brew install bash-completion@2
-grep '/usr/local/bin/bash' /etc/shells || echo '/usr/local/bin/bash' >> /etc/shells
+# @TODO:
+sudo cat >> /etc/shells <<EOF
+# /usr/local/bin/bash $(date +%F_%T%z)
+/usr/local/bin/bash
+EOF
 chsh -s /usr/local/bin/bash
 grep '^# BASH_COMPLETION' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
 # BASH_COMPLETION $(date +%F_%T%z)
 export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
 EOF
 # git completion
 cd /usr/local/etc/bash_completion.d/
@@ -76,7 +91,7 @@ curl -L -O https://raw.github.com/git/git/master/contrib/completion/git-completi
 [[ -d /Applications/iTerm.app/ ]] || { \
     wget -c -P /tmp/ https://iterm2.com/downloads/stable/iTerm2-3_3_11.zip \
  && unzip -d /tmp/ /tmp/iTerm2-3_3_11.zip \
- && mv /tmp/iTerm.app /Application/;
+ && sudo mv /tmp/iTerm.app /Application/;
 }
 
 
@@ -91,11 +106,12 @@ which docker || { \
     wget -c -P /tmp/ https://download.docker.com/mac/stable/Docker.dmg \
  && open /tmp/Docker.dmg \
  && sleep 5 \
- && cp -prfv /Volumes/Docker/Docker.app /Applications/ \
- && umount /Volumes/Docker; \
-    cd /usr/local/etc/bash_completion.d/; \
-    curl -L -O https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose; \
-    curl -L -O https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker; }
+ && sudo cp -prfv /Volumes/Docker/Docker.app /Applications/ \
+ && umount /Volumes/Docker \
+ && cd /usr/local/etc/bash_completion.d/ \
+ && curl -L -O https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose \
+ && curl -L -O https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker
+}
 
 
 ###################
@@ -104,12 +120,12 @@ which docker || { \
 #   https://www.sublimetext.com/3
 #   @TODO: configs
 [[ -d /Applications/Sublime\ Text.app/ ]] || { \
-       wget -c -O /tmp/SublimeTextBuild.dmg https://download.sublimetext.com/Sublime%20Text%20Build%203211.dmg
-    && open /tmp/SublimeTextBuild.dmg
-    && sleep 3
-    && cp -prfv /Volumes/Sublime\ Text/Sublime\ Text.app /Applications/
-    && grep subl ~/.bash_profile || echo 'alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"' >> ~/.bash_profile
-    && umount /Volumes/Sublime\ Text \
+       wget -c -O /tmp/SublimeTextBuild.dmg https://download.sublimetext.com/Sublime%20Text%20Build%203211.dmg \
+    && open /tmp/SublimeTextBuild.dmg \
+    && sleep 3 \
+    && cp -prfv /Volumes/Sublime\ Text/Sublime\ Text.app /Applications/ \
+    && grep subl ~/.bash_profile || echo -e "# subl $(date +%F_%T%z)\nalias subl=\"/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl\"\n" >> ~/.bash_profile \
+    && umount /Volumes/Sublime\ Text; \
 }
 # Install Plugins
 #   JSON
@@ -123,10 +139,10 @@ which docker || { \
 #   https://code.visualstudio.com/Download
 #   @TODO: configs
 [[ -d /Applications/Visual\ Studio\ Code.app/ ]] || { \
-    wget -c -O /tmp/VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
-unzip -d /tmp/ /tmp/VSCode-darwin-stable.zip
-echo -e "\n\tPlease move \"Visual Studio Code\" to \"Applications\"\n"
-open /tmp/ 
+       wget -c -O /tmp/VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882 \
+    && unzip -d /tmp/ /tmp/VSCode-darwin-stable.zip \
+    && sudo mv /tmp/Visual\ Studio\ Code.app/ /Applications/ \
+}
 # Install code command in PATH:
 #     Shift + CMD + P 
 #   -> shell 
@@ -167,6 +183,7 @@ mv /tmp/rancher-v2.4.3/rancher /usr/local/bin/
 #   https://kubernetes.io/docs/tasks/tools/install-kubectl/
 #   https://github.com/derailed/k9s
 #   https://github.com/ahmetb/kubectx
+#   https://microk8s.io
 mkdir -pv ~/.kube/conf.d/
 brew install \
     kubectl \
@@ -175,15 +192,22 @@ brew install \
     kubectx \
     krew \
     derailed/k9s/k9s \
-    microk8s
+    ubuntu/microk8s/microk8s
 grep '^# kubectl completion' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
 # kubectl completion $(date +%F_%T%z)
+# @TODO:   1 .bash_profile|14 error| syntax error near unexpected token `('
 source <(kubectl completion bash)
 alias k=kubectl
 complete -F __start_kubectl k
+
 EOF
-kustomize install-completion <<<yes
-grep '^export KUBECONFIG' ~/.bash_profile || echo 'export KUBECONFIG="${HOME}/.kube/config$(ls -d ${HOME}/.kube/conf.d/*|sed "s#^#:#g"|tr -d "\n")"' >> ~/.bash_profile
+echo yes | kustomize install-completion
+mkdir -pv ${HOME}/.kube/ && touch ${HOME}/.kube/example
+grep '^export KUBECONFIG' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
+# kubeconfig $(date +%F_%T%z)
+export KUBECONFIG="\${HOME}/.kube/config\$(ls \${HOME}/.kube/conf.d/*|sed "s#^#:#g"|tr -d "\n")"
+
+EOF
 # Install lens
 #   https://k8slens.dev/
 { \
@@ -201,8 +225,8 @@ grep '^export KUBECONFIG' ~/.bash_profile || echo 'export KUBECONFIG="${HOME}/.k
 ###################
 #   https://golang.org/dl/
 { \
-wget -c -P /tmp/ https://dl.google.com/go/go1.14.4.darwin-amd64.pkg; \
-open /tmp/go1.14.4.darwin-amd64.pkg; \
+    wget -c -P /tmp/ https://dl.google.com/go/go1.14.4.darwin-amd64.pkg \
+ && open /tmp/go1.14.4.darwin-amd64.pkg; \
 }
 
 
@@ -234,17 +258,19 @@ cat > ~/to-be-install.md <<EOT
 * Firefox
 * Slack
 * Zoom
-* Mweb
-* Youdao Dict
+* Authy
 * CheatSheet
-* Enpass
 * Lastpass
-* Easyfind
 * VLC
 * OBS
 * PyCharm
-* Evernote
 * Tunnelblick
+* AppStore
+    * Mweb
+    * Enpass
+    * Evernote
+    * Easyfind
+    * Youdao Dict
 EOT
 
 
@@ -252,10 +278,14 @@ EOT
 # Install Vanilla  #
 ####################
 #   https://matthewpalmer.net/vanilla/
-wget -c -P /tmp/ https://macrelease.matthewpalmer.net/Vanilla.dmg
-open /tmp/Vanilla.dmg
-cp -prf /Volumes/Vanilla/Vanilla.app /Applications/
-umount /Volumes/Vanilla
+{ \
+    wget -c -P /tmp/ https://macrelease.matthewpalmer.net/Vanilla.dmg \
+ && open /tmp/Vanilla.dmg \
+ && sleep 3 \
+ && cp -prf /Volumes/Vanilla/Vanilla.app /Applications/ \
+ && umount /Volumes/Vanilla; \
+}
+
 
 
 ################
@@ -263,10 +293,10 @@ umount /Volumes/Vanilla
 ################ 
 
 
-
 ###########
 # Unmount # 
 ###########
-
-
-umount "/Volumes/Lens 3.4.0"
+umount /Volumes/Firefox
+umount /Volumes/Google\ Chrome
+umount /Volumes/Google\ Chrome\ Canary/
+umount /Volumes/Slack.app
