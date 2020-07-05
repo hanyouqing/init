@@ -83,14 +83,22 @@ source ~/.${SHELL##*bin/}rc
 ############
 # SpaceVim #
 ############
-# Fix CMD + C:
-#   https://github.com/SpaceVim/SpaceVim/issues/695
+#   https://github.com/SpaceVim/SpaceVim
+#   https://spacevim.org/documentation/
 #   https://github.com/yangyangwithgnu/use_vim_as_ide
+#   Fix CMD + C:
+#   https://github.com/SpaceVim/SpaceVim/issues/695
 curl -sLf https://spacevim.org/install.sh | bash
+mkdir -p ~/.SpaceVim.d/autoload
+cat >> ~/.SpaceVim.d/autoload/custom_init.vim <<EOF 
+function! custom_init#before() abort
+    set mouse=r
+endf
+EOF
 
 
 #################
-# Install Conda # thefuck, ipython
+# Install Conda #
 #################
 #   https://docs.conda.io/en/latest/miniconda.html
 CONDA_SCRIPT="Miniconda3-latest-$(uname -s)-$(uname -m).sh"

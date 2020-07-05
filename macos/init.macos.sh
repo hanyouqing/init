@@ -72,10 +72,12 @@ curl -L -O https://raw.github.com/git/git/master/contrib/completion/git-completi
 ##################
 # Install iTerm2 #
 ##################
-wget -c -P /tmp/ https://iterm2.com/downloads/stable/iTerm2-3_3_11.zip
-unzip -d /tmp/ /tmp/iTerm2-3_3_11.zip
-open /tmp/
-echo -e "\n\tPlease move \"iTerm\" to \"Applications\"\n"
+#   https://www.iterm2.com/documentation.html
+[[ -d /Applications/iTerm.app/ ]] || { \
+    wget -c -P /tmp/ https://iterm2.com/downloads/stable/iTerm2-3_3_11.zip \
+ && unzip -d /tmp/ /tmp/iTerm2-3_3_11.zip \
+ && mv /tmp/iTerm.app /Application/;
+}
 
 
 ##########################
@@ -86,8 +88,11 @@ echo -e "\n\tPlease move \"iTerm\" to \"Applications\"\n"
 #   https://docs.docker.com/compose/completion/
 #   https://docs.docker.com/engine/reference/commandline/app_completion/
 which docker || { \
-    wget -c -P /tmp/ https://download.docker.com/mac/stable/Docker.dmg; \
-    open /tmp/Docker.dmg; \
+    wget -c -P /tmp/ https://download.docker.com/mac/stable/Docker.dmg \
+ && open /tmp/Docker.dmg \
+ && sleep 5 \
+ && cp -prfv /Volumes/Docker/Docker.app /Applications/ \
+ && umount /Volumes/Docker; \
     cd /usr/local/etc/bash_completion.d/; \
     curl -L -O https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose; \
     curl -L -O https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker; }
@@ -98,9 +103,14 @@ which docker || { \
 ###################
 #   https://www.sublimetext.com/3
 #   @TODO: configs
-wget -c -O /tmp/SublimeTextBuild.dmg https://download.sublimetext.com/Sublime%20Text%20Build%203211.dmg
-open /tmp/SublimeTextBuild.dmg
-grep subl ~/.bash_profile || echo 'alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"' >> ~/.bash_profile
+[[ -d /Applications/Sublime\ Text.app/ ]] || { \
+       wget -c -O /tmp/SublimeTextBuild.dmg https://download.sublimetext.com/Sublime%20Text%20Build%203211.dmg
+    && open /tmp/SublimeTextBuild.dmg
+    && sleep 3
+    && cp -prfv /Volumes/Sublime\ Text/Sublime\ Text.app /Applications/
+    && grep subl ~/.bash_profile || echo 'alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"' >> ~/.bash_profile
+    && umount /Volumes/Sublime\ Text \
+}
 # Install Plugins
 #   JSON
 #   Emmet
@@ -112,7 +122,8 @@ grep subl ~/.bash_profile || echo 'alias subl="/Applications/Sublime\ Text.app/C
 #   https://code.visualstudio.com/
 #   https://code.visualstudio.com/Download
 #   @TODO: configs
-wget -c -O /tmp/VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
+[[ -d /Applications/Visual\ Studio\ Code.app/ ]] || { \
+    wget -c -O /tmp/VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
 unzip -d /tmp/ /tmp/VSCode-darwin-stable.zip
 echo -e "\n\tPlease move \"Visual Studio Code\" to \"Applications\"\n"
 open /tmp/ 
@@ -129,6 +140,7 @@ open /tmp/
 #   markdown
 #   mermaid-diagram
 #   emmet
+#   marp
 # Git Plugin:
 #   git history
 #   git graph
@@ -162,7 +174,8 @@ brew install \
     kustomize \
     kubectx \
     krew \
-    derailed/k9s/k9s
+    derailed/k9s/k9s \
+    microk8s
 grep '^# kubectl completion' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
 # kubectl completion $(date +%F_%T%z)
 source <(kubectl completion bash)
@@ -172,8 +185,15 @@ EOF
 kustomize install-completion <<<yes
 grep '^export KUBECONFIG' ~/.bash_profile || echo 'export KUBECONFIG="${HOME}/.kube/config$(ls -d ${HOME}/.kube/conf.d/*|sed "s#^#:#g"|tr -d "\n")"' >> ~/.bash_profile
 # Install lens
-wget -c -P /tmp/ https://github.com/lensapp/lens/releases/download/v3.4.0/Lens-3.4.0.dmg
-open /tmp/Lens-3.4.0.dmg
+#   https://k8slens.dev/
+{ \
+   wget -c -P /tmp/ https://github.com/lensapp/lens/releases/download/v3.5.0/Lens-3.5.0.dmg \
+&& open /tmp/Lens-3.4.0.dmg \
+&& sleep 5 \
+&& cp -prf /Volumes/Lens\ 3.5.0/Lens.app /Applications/ \
+&& unmount /Volumes/Lens\ 3.5.0; \
+}
+
 
 
 ###################
@@ -224,14 +244,29 @@ cat > ~/to-be-install.md <<EOT
 * OBS
 * PyCharm
 * Evernote
-* ClashX
 * Tunnelblick
 EOT
+
+
+####################
+# Install Vanilla  #
+####################
+#   https://matthewpalmer.net/vanilla/
+wget -c -P /tmp/ https://macrelease.matthewpalmer.net/Vanilla.dmg
+open /tmp/Vanilla.dmg
+cp -prf /Volumes/Vanilla/Vanilla.app /Applications/
+umount /Volumes/Vanilla
+
+
+################
+# Install OBS  #
+################ 
+
 
 
 ###########
 # Unmount # 
 ###########
-umount "/Volumes/Docker/"
-umount "/Volumes/Sublime Text"
+
+
 umount "/Volumes/Lens 3.4.0"
