@@ -45,7 +45,8 @@ brew install \
     bat \
     jq \
     mtr \
-    telnet
+    telnet \
+    ffmpeg
 
 
 ###############

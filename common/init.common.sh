@@ -7,16 +7,27 @@
 #########################################################################
 #
 
+#####################
+# Config ~/.profile #
+#####################
+grep '# ~/.profile' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
+# ~/.profile $(date +%F_%T%z)
+[[ -f ~/.profile ]] && . ~/.profile
 
-#####################
-# Configure for ssh #
-#####################
+EOF
+echo '[[ -f ~/.profile ]] && . ~/.profile' >> ~/.bash_profile
+
+
+##################
+# Config for ssh #
+##################
 mkdir -pv    /tmp/hosts
 mkdir -pv    ~/.ssh/conf.d
 touch        ~/.ssh/config
 touch        ~/.ssh/{deveplopment,staging,productoin,me}.pem
 chmod -R 700 ~/.ssh
 chmod -R 700 ~/.ssh/conf.d
+chmod -R 600 ~/.ssh/conf.d/*
 find         ~/.ssh/ -type f -exec chmod 600 {} \;
 cat > ~/.ssh/config <<EOT
 Host *
@@ -80,9 +91,9 @@ source ~/.${SHELL##*bin/}rc
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
 
-############
-# SpaceVim #
-############
+####################
+# Install SpaceVim #
+####################
 #   https://github.com/SpaceVim/SpaceVim
 #   https://spacevim.org/documentation/
 #   https://github.com/yangyangwithgnu/use_vim_as_ide
@@ -103,7 +114,7 @@ EOF
 #   https://docs.conda.io/en/latest/miniconda.html
 CONDA_SCRIPT="Miniconda3-latest-$(uname -s)-$(uname -m).sh"
 wget -c -P /tmp/ https://repo.continuum.io/miniconda/${CONDA_SCRIPT//Darwin/MacOSX} 
-[ -d ${HOME}/miniconda3 ] || bash ${INFRA_DOWNLOADS}/${CONDA_SCRIPT//Darwin/MacOSX} -bfu 
+[ -d ${HOME}/miniconda3 ] || bash /tmp/${CONDA_SCRIPT//Darwin/MacOSX} -bfu 
 ~/miniconda3/bin/conda init ${SHELL##*bin/}
 ~/miniconda3/bin/conda update -n base -c defaults conda <<<y 
 ~/miniconda3/bin/conda config --set auto_activate_base false
@@ -128,9 +139,9 @@ grep '.tfenv'  ~/.${SHELL##*bin/}rc || echo 'export PATH="$HOME/.tfenv/bin:$PATH
 # Install Binaries #
 ####################
 mkdir -pv ~/Apps/bin
-grep '^# Apps' ~/.bash_profile || cat  >> ~/.bash_profile <<EOF
+grep '^# Apps/bin' ~/.bash_profile || cat  >> ~/.bash_profile <<EOF
 # Apps/bin $(date +%F_%T%z)
-PATH=$PATH:~/Apps/bin
+PATH=\$PATH:~/Apps/bin
 
 EOF
 
