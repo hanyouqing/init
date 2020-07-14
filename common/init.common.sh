@@ -47,6 +47,7 @@ $([[ $(uname) == "Darwin" ]]&&echo "    UseKeychain yes")
     ServerAliveCountMax 360
     TCPKeepAlive yes
 
+# Include depends on OpenSSH_7.3p1+
 Include ~/.ssh/conf.d/development
 Include ~/.ssh/conf.d/testing
 Include ~/.ssh/conf.d/staging
@@ -54,6 +55,18 @@ Include ~/.ssh/conf.d/production
 Include ~/.ssh/conf.d/default
 EOT
 cat > ~/.ssh/conf.d/default <<EOT
+Host jump-ali-bj-000 x.x.x.x
+    HostName x.x.x.x
+    User 18600000000
+    Port xxxxx
+
+Host cvm-tct-sha-001 y.y.y.y
+    HostName y.y.y.y
+    User username
+    Port 22
+    IdentityFile ~/.ssh/jump-ali-bj-000.pem
+    ProxyCommand ssh jump-ali-bj-000 -q -W %h:%p
+
 Host *
     Port 22
     IdentityFile ~/.ssh/id_rsa
@@ -75,6 +88,20 @@ git clone https://github.com/bobthecow/git-flow-completion.git ~/github.com/bobt
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install <<<y
 source ~/.${SHELL##*bin/}rc
+
+
+#################
+# Install tfenv #
+#################
+#   https://github.com/tfutils/tfenv
+#   https://www.terraform.io/docs/commands/index.html
+[[ -d ~/.tfenv ]] || { \
+   git clone https://github.com/tfutils/tfenv.git ~/.tfenv \
+&& cd ~/.tfenv \
+&& lastest_version="$(git tag|grep -v '-'|tail -1)"; git checkout tags/${lastest_version} -b ${lastest_version}; \
+} 
+grep '# tfenv' ~/.bash_profile || echo -e "# tfenv $(date +%F_%T%z)\nexport PATH=\"\$HOME/.tfenv/bin:\$PATH\"" >> ~/.bash_profile
+source ~/.bash_profile && terraform -install-autocomplete
 
 
 #####################
@@ -102,6 +129,7 @@ source ~/.${SHELL##*bin/}rc
 curl -sLf https://spacevim.org/install.sh | bash
 mkdir -p ~/.SpaceVim.d/autoload
 cat >> ~/.SpaceVim.d/autoload/custom_init.vim <<EOF 
+# fix copy $(date +%F_%T%z)
 function! custom_init#before() abort
     set mouse=r
 endf
@@ -114,7 +142,7 @@ EOF
 #   https://docs.conda.io/en/latest/miniconda.html
 CONDA_SCRIPT="Miniconda3-latest-$(uname -s)-$(uname -m).sh"
 wget -c -P /tmp/ https://repo.continuum.io/miniconda/${CONDA_SCRIPT//Darwin/MacOSX} 
-[ -d ${HOME}/miniconda3 ] || bash /tmp/${CONDA_SCRIPT//Darwin/MacOSX} -bfu 
+[ -d ~/miniconda3 ] || bash /tmp/${CONDA_SCRIPT//Darwin/MacOSX} -bfu
 ~/miniconda3/bin/conda init ${SHELL##*bin/}
 ~/miniconda3/bin/conda update -n base -c defaults conda <<<y 
 ~/miniconda3/bin/conda config --set auto_activate_base false

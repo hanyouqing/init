@@ -4,6 +4,7 @@
 #
 
 echo "[$(date +%F_%T%z)] Starting initialize." | tee -a /root/init.log 2>&1
+sudo locale-gen "en_US.UTF-8"
 grep $(hostname) /etc/hosts || echo "127.0.0.1 $(hostname)" >> /etc/hosts
 chmod -R 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys

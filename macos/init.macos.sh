@@ -46,7 +46,8 @@ brew install \
     jq \
     mtr \
     telnet \
-    ffmpeg
+    ffmpeg \
+    hugo
 
 
 ###############
