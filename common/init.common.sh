@@ -134,6 +134,26 @@ function! custom_init#before() abort
     set mouse=r
 endf
 EOF
+cat >> ~/.SpaceVim/autoload/SpaceVim/default.vim <<EOF
+# Fix copy to clipboard $(date +%F_%T%z)
+#   https://github.com/SpaceVim/SpaceVim/issues/2202
+#   https://github.com/SpaceVim/SpaceVim/commit/c4be5b44d4ea7cda980e876e92741be41a914afa
+if has('unnamedplus')
+  xnoremap <Leader>y "+y
+  xnoremap <Leader>d "+d
+  nnoremap <Leader>p "+p
+  nnoremap <Leader>P "+P
+  xnoremap <Leader>p "+p
+  xnoremap <Leader>P "+P
+else
+  xnoremap <Leader>y "*y
+  xnoremap <Leader>d "*d
+  nnoremap <Leader>p "*p
+  nnoremap <Leader>P "*P
+  xnoremap <Leader>p "*p
+  xnoremap <Leader>P "*P
+endif
+EOF
 
 
 #################
