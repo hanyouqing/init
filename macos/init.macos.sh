@@ -48,6 +48,11 @@ brew install \
     telnet \
     ffmpeg \
     hugo
+# speedtest cli: https://www.speedtest.net/apps/cli
+brew tap teamookla/speedtest
+brew update
+brew install speedtest --force
+
 
 
 ###############
@@ -183,6 +188,7 @@ mv /tmp/rancher-v2.4.3/rancher /usr/local/bin/
 # Install kubernetes tools #
 ############################
 #   https://kubernetes.io/docs/tasks/tools/install-kubectl/
+#   https://github.com/GoogleContainerTools/skaffold
 #   https://github.com/derailed/k9s
 #   https://github.com/ahmetb/kubectx
 #   https://microk8s.io
@@ -191,6 +197,7 @@ brew install \
     kubectl \
     helm \
     kustomize \
+    skaffold \
     kubectx \
     krew \
     derailed/k9s/k9s \
