@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hostname(){
+hostname() {
     HOSTNAME="${$1:=YouqingsMBP}"
     sudo scutil --set HostName ${HOSTNAME}
     sudo scutil --set ComputerName ${HOSTNAME}
@@ -14,6 +14,10 @@ reset() {
     sudo xattr -r -c        ${fd}
     sudo chmod -R -N        ${fd}
     sudo chown -R $(whoami) ${fd}
+}
+
+flushdns() {
+    /usr/sbin/rndc flush
 }
 
 exec "${@}"

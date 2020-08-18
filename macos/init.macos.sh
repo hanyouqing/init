@@ -33,6 +33,10 @@ xcode-select --install || softwareupdate --install -a
 ############################
 # ALL_PROXY=socks5://127.0.0.1:7891
 brew install \
+    wireguard-tools \
+    speedtest \
+    iperf \
+    wireguard-tools \
     git-flow \
     readline \
     bash \
@@ -47,7 +51,12 @@ brew install \
     mtr \
     telnet \
     ffmpeg \
-    hugo
+    hugo \
+    nvm \
+    jsonnet \
+    kubecfg \
+    pulumi \
+    cfssl
 # speedtest cli: https://www.speedtest.net/apps/cli
 brew tap teamookla/speedtest
 brew update
@@ -201,7 +210,7 @@ brew install \
     kubectx \
     krew \
     derailed/k9s/k9s \
-    ubuntu/microk8s/microk8s
+    ubuntu/microk8s/microk8s \
 grep '^# kubectl completion' ~/.bash_profile || cat >> ~/.bash_profile <<EOF
 # kubectl completion $(date +%F_%T%z)
 # @TODO:   1 .bash_profile|14 error| syntax error near unexpected token `('
@@ -296,10 +305,17 @@ EOT
 }
 
 
-
 ################
 # Install OBS  #
 ################ 
+#   https://obsproject.com/
+{ \
+    wget -c -P /tmp/ https://cdn-fastly.obsproject.com/downloads/obs-mac-25.0.8.dmg \
+ && open /tmp/obs-mac-25.0.8.dmg
+ && sleep 3 \
+ && cp -prf /Volumes/OBS/OBS.app /Applications/ \
+ && umount /Volumes/OBS; \
+}
 
 
 ###########
@@ -309,3 +325,4 @@ umount /Volumes/Firefox
 umount /Volumes/Google\ Chrome
 umount /Volumes/Google\ Chrome\ Canary/
 umount /Volumes/Slack.app
+
