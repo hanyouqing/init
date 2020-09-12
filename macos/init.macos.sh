@@ -56,7 +56,8 @@ brew install \
     jsonnet \
     kubecfg \
     pulumi \
-    cfssl
+    cfssl \
+    pipenv 
 # speedtest cli: https://www.speedtest.net/apps/cli
 brew tap teamookla/speedtest
 brew update
@@ -75,6 +76,7 @@ export CPPFLAGS="-I/usr/local/opt/zlib/include"
 export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig"
 
 EOL
+
 
 
 ###########################
@@ -107,7 +109,19 @@ curl -L -O https://raw.github.com/git/git/master/contrib/completion/git-completi
 [[ -d /Applications/iTerm.app/ ]] || { \
     wget -c -P /tmp/ https://iterm2.com/downloads/stable/iTerm2-3_3_11.zip \
  && unzip -d /tmp/ /tmp/iTerm2-3_3_11.zip \
- && sudo mv /tmp/iTerm.app /Application/;
+ && sudo mv /tmp/iTerm.app /Application/ \
+}
+
+
+####################
+# Install TermHere #
+####################
+#   https://hashbang.productions/apps/termhere/
+{ \ 
+    wget -c -P /tmp/ https://dl.hbang.ws/macos/TermHere%201.2.1.dmg \
+ && open /tmp/TermHere\ 1.2.1.dmg \
+ && sudo cp -prfv /Volumes/TermHere\ 1.2.1/TermHere.app /Applications/ \
+ && umount /Volumes/TermHere\ 1.2.1 \
 }
 
 
