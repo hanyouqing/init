@@ -33,10 +33,8 @@ xcode-select --install || softwareupdate --install -a
 ############################
 # ALL_PROXY=socks5://127.0.0.1:7891
 brew install \
-    wireguard-tools \
     speedtest \
     iperf \
-    wireguard-tools \
     git-flow \
     readline \
     bash \
@@ -57,12 +55,15 @@ brew install \
     kubecfg \
     pulumi \
     cfssl \
-    pipenv 
+    pipenv \
+    tfsec \
+    trash
 # speedtest cli: https://www.speedtest.net/apps/cli
 brew tap teamookla/speedtest
 brew update
 brew install speedtest --force
 
+# wireguard-tools 
 
 
 ###############
@@ -100,6 +101,8 @@ EOF
 # git completion
 cd /usr/local/etc/bash_completion.d/
 curl -L -O https://raw.github.com/git/git/master/contrib/completion/git-completion.bash
+echo '[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"' >> ~/.bash_profile
+'
 
 
 ##################
@@ -341,3 +344,5 @@ umount /Volumes/Google\ Chrome
 umount /Volumes/Google\ Chrome\ Canary/
 umount /Volumes/Slack.app
 
+
+alias chrome="open /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=/tmp/temper"

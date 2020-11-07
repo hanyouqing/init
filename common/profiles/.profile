@@ -13,7 +13,8 @@ HISTTIMEFORMAT="[%d/%m/%Y %T%z] ($(whoami)) "
 export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
-PS1='\[\033[01;32m\]\h\[\033[01;34m\]:\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\[\033[0;32m\]\n\[\033[0;93m\]\u$\[\033[00m\] '
+PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\]:\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\[\033[0;32m\] <$(kubectl config current-context)> \n\[\033[0;93m\]'${cmd_prompt}'\[\033[00m\] '
+#PS1='\[\033[01;32m\]\h\[\033[01;34m\]:\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\[\033[0;32m\]\n\[\033[0;93m\]\u$\[\033[00m\] '
 parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \(\1\)/'
 }
@@ -21,10 +22,14 @@ parse_git_branch() {
 # --------------------------- #
 #    Customize alias cmds     #
 # --------------------------- #
+alias tm="tmux"
 alias vi='vim'
 alias ls='ls -G'
 alias ll='ls -l'
 alias grep='grep --color'
+if [ "$(uname)" == "Darwin" -a "$(which trash)" != "" ]; then
+    alias rm="trash"
+fi
 
 # ---------------------------- #
 #    Customize alias todir     #
@@ -45,6 +50,11 @@ export PATH=${HOME}/Apps/maven/bin:${PATH}
 export PATH=${HOME}/Apps/helm/:${PATH}
 
 # --------------------------------------- # 
+#    Customize environment for Python     #
+# --------------------------------------- #
+# @TODO:
+
+# --------------------------------------- # 
 #    Customize environment for Golang     #
 # --------------------------------------- #
 [[ -d ~/go/src ]]            || mkdir -p ~/go/src
@@ -63,5 +73,14 @@ export PATH=$PATH:$GOROOT/bin:$GOBIN
 #export JAVA_CLASSIC=
 #export JAVA_LIB=
 #export M2_HOME=
+
+# ------------------------------------- # 
+#         Customize kubectl             #
+# ------------------------------------- #
+[[ -d ${HOME}/.kube/conf.d/ ]] || mkdir -p ${HOME}/.kube/conf.d/
+export PATH="${PATH}:${HOME}/.krew/bin"
+export KUBEDIR="${HOME}/.kube"
+export KUBECONFIG="${KUBEDIR}/config:$(ls -d ${KUBEDIR}/conf.d/*|sed 's#^#:#g'|tr -d '\n')"
+#export KUBECONFIG_SAVED="${KUBECONFIG}"
 
 [[ -s ~/.bashrc ]] && . ~/.bashrc
