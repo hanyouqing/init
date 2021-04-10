@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Setting PS4
+
+    - name: Install Git
+
+    - name: Install fzf
+
+    - name: Install tmux
+
+    - name: Install bash
+    - name: Install xz
+
+    - name: Install miniconda
+
+    - name: Install terraform
+
+    - name: Install docker
+
+    - name: Install kubectl
+
+    - name: Install speedtest
+    - name: Install iperf

@@ -1,27 +1,85 @@
-[alias]
-    co = checkout
-    ci = commit
-    br = branch
-    st = status
-    pu = push
-    pl = pull
-    bl = blame
-    di = diff
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    sbi = submodule init
-    sbu = submodule update
-    sbp = submodule foreach git pull
-    sbc = submodule foreach git co master
-
+# for non-tubi name in public repos, use an IncludeIf https://dzone.com/articles/how-to-use-gitconfigs-includeif
 [user]
-    name = Youqing Han
-    email = ihanyouqing@gmail.com
+  name = Youqing Han
+	email = youqing@tubi.tv
+[github]
+  user = hanyouqing
 
+[core]
+  pager = diff-so-fancy | less --tabs=4 -RFX
+  # pager = delta
+  excludesfile = ~/.gitignore
+[includeIf "gitdir:~/github.com/work/"]
+  path = ~/github.com/work/gitconfig
+[http]
+#  proxy = http://127.0.0.1:7890
+
+[color]
+  all = true
+  ui = true
+  branch = auto
+  diff = auto
+  status = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = blue
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = green
+  changed = blue
+  untracked = yellow
+
+[alias]
+  lg = log --color --graph --pretty=format:'%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  ll = log --pretty=oneline --graph --abbrev-commit --decorate --topo-order
+  pl = pull
+  br = branch
+  co = checkout
+  ci = commit
+  st = status
+  pu = push
+  bl = blame
+  di = diff
+  si = rev-parse --short HEAD
+  last = log -p
+  unstage = reset HEAD --
+  squash = !"f() { NL=$1; GIT_EDITOR=\"sed -i '2,$NL s/pick/squash/;/# This is the 2nd commit message:/,$ {d}'\"; git rebase -i HEAD~$NL; }; f"
+  sq = !git squash $1
+  sqpsf = !git squash $1 && git psf
 [filter "lfs"]
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
-    required = true
-
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+[help]
+  autocorrect = 1
 [pull]
-    rebase = true
+  rebase = true
+[push]
+  default = current
+[stash]
+  showPatch = 1
+[branch]
+  autosetuprebase = always
+[pager]
+  log = less
+  show = less -R
+[diff-so-fancy]
+  markEmptyLines = false
+[difftool "vim_ignore_whitespace"]
+  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[difftool]
+  prompt = false
+[delta]
+  plus-color = "#012800"
+  minus-color = "#340001"
+  syntax-theme = Monokai Extended
+[interactive]
+  diffFilter = delta --color-only
+[mailmap]
+	file = /Users/youqing/.config/git/tubi_mailmap.txt

@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  tasks:
+    - community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+        update_homebrew: yes
+      with_items:
+        - bash
+        - tmux
+        - wget
+        - unzip 
+        - xz
+        - tree
+        - bat
+        - jq
+        - yq
+        - jsonnet
+        - mtr
+        - telnet
+        - iperf
+        - speedtest
+        - hugo
+        - cfssl
+        - kubecfg
+        - pulumi
+        - tfsec
+#        - wireguard-tool
+#        - ffmpeg

@@ -5,7 +5,13 @@
 
 echo "[$(date +%F_%T%z)] Starting initialize." | tee -a /root/init.log 2>&1
 sudo locale-gen "en_US.UTF-8"
-grep $(hostname) /etc/hosts || echo "127.0.0.1 $(hostname)" >> /etc/hosts
+hostname ubuntu.internal.icmdb.vip
+hostname > /etc/hostname
+hostname -d >> /etc/resolvconf/resolv.conf.d/head
+resolvconf -u
+hostnamectl >> /root/init.log
+systemd-resolve --status >> /root/init.log
+grep $(hostname) /etc/hosts || echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
 chmod -R 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys
 ls -al /root | tee -a /root/init.log 2>&1
@@ -118,15 +124,15 @@ chattr +i /etc/sudoers
 # chmod 0600 /usr/bin/{chattr,lsattr}
 
 ###### Format and mount data disk ######
-echo "[$(date +%F_%T%z)] Format and mount data disk." | tee -a /root/init.log
-[[ -e /dev/vdb ]] && { \
-    grep '^/dev/vdb' /etc/fstab || echo "/dev/vdb  /opt ext4 defaults,nofail 0 2" >> /etc/fstab; \
-    echo data | mkfs.ext4 /dev/vdb && mkdir -p /opt && mount -a | tee -a /root/init.log 2>&1; \
-}
-[[ -e /dev/sdb ]] && { \
-    grep '^/dev/sdb' /etc/fstab || echo "/dev/sdb  /opt ext4 defaults,nofail 0 2" >> /etc/fstab; \
-    echo data | mkfs.ext4 /dev/sdb && mkdir -p /opt && mount -a | tee -a /root/init.log 2>&1; \
-}
+#echo "[$(date +%F_%T%z)] Format and mount data disk." | tee -a /root/init.log
+#[[ -e /dev/vdb ]] && { \
+#    grep '^/dev/vdb' /etc/fstab || echo "/dev/vdb  /opt ext4 defaults,nofail 0 2" >> /etc/fstab; \
+#    echo data | mkfs.ext4 /dev/vdb && mkdir -p /opt && mount -a | tee -a /root/init.log 2>&1; \
+#}
+#[[ -e /dev/sdb ]] && { \
+#    grep '^/dev/sdb' /etc/fstab || echo "/dev/sdb  /opt ext4 defaults,nofail 0 2" >> /etc/fstab; \
+#    echo data | mkfs.ext4 /dev/sdb && mkdir -p /opt && mount -a | tee -a /root/init.log 2>&1; \
+#}
 df -h | tee -a /root/init.log 2>&1
 fdisk -l | tee -a /root/init.log 2>&1
 
@@ -134,7 +140,8 @@ fdisk -l | tee -a /root/init.log 2>&1
 echo 1|dpkg --configure -a | tee -a /root/init.log 2>&1
 apt-get -y update | tee -a /root/init.log 2>&1
 apt-get -y install ca-certificates && update-ca-certificates | tee -a /root/init.log 2>&1
-apt-get -y install vim language-pack-zh-hant language-pack-zh-hans | tee -a /root/init.log 2>&1
+apt-get -y install vim net-tools | tee -a /root/init.log 2>&1
+apt-get -y install language-pack-zh-hant language-pack-zh-hans | tee -a /root/init.log 2>&1
 apt-get -y install bash-completion git zip unzip | tee -a /root/init.log 2>&1
 apt-get -y install mlocate tree dig telnet  | tee -a /root/init.log 2>&1
 apt-get -y install lsof strace iftop htop iotop nmon screen| tee -a /root/init.log 2>&1

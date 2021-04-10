@@ -1,0 +1,25 @@
+---
+os_init: 
+  packages:
+    - bash
+    - tmux
+    - wget
+    - unzip
+    - xz
+    - tree
+    - bat
+    - jq
+    - yq
+    - jsonnet
+    - mtr
+    - telnet
+    - iperf
+    - speedtest
+    - hugo
+    - cfssl
+    - kubecfg
+    - pulumi
+    - tfsec
+    - nvm
+    - miniconda
+    # - ffmpeg

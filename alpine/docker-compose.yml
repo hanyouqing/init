@@ -1,0 +1,10 @@
+version: "3"
+services:
+  alpine:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - BASE_IMAGE=alpine:3.12
+    image: hanyouqing/alpine
+

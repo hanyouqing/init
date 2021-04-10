@@ -36,6 +36,7 @@ brew install \
     speedtest \
     iperf \
     git-flow \
+    diff-so-fancy \
     readline \
     bash \
     tmux \
@@ -50,6 +51,7 @@ brew install \
     telnet \
     ffmpeg \
     hugo \
+    miniconda \
     nvm \
     jsonnet \
     kubecfg \

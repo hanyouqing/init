@@ -31,6 +31,7 @@ chmod -R 600 ~/.ssh/conf.d/*
 find         ~/.ssh/ -type f -exec chmod 600 {} \;
 cat > ~/.ssh/config <<EOT
 Host *
+$([[ $(uname) == "Darwin" ]]&&echo "    IgnoreUnkown UseKeyChain")
 $([[ $(uname) == "Darwin" ]]&&echo "    UseKeychain yes")
     AddKeysToAgent yes
     Compression yes
